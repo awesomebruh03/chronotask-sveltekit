@@ -23,13 +23,16 @@
 		{#if isOpen}
 			<ul>
 				<li class="mb-2 hover:bg-gray-300 hover:text-2xl hover:text-black">
-					<a href="#dashboard">Dashboard</a>
+					<a href="#dashboard"> <Icon icon="carbon:home" width="32" height="32" />Dashboard</a>
 				</li>
 				<li class="mb-2 hover:bg-gray-300 hover:text-2xl hover:text-black">
-					<a href="#projects">Projects</a>
+					<a href="#projects"><Icon icon="carbon:list-dropdown" width="32" height="32" />Projects</a
+					>
 				</li>
 				<li class="mb-2 hover:bg-gray-300 hover:text-2xl hover:text-black">
-					<a href="#settings">Settings</a>
+					<a href="#settings"
+						><Icon icon="solar:settings-bold-duotone" width="24" height="24" />Settings</a
+					>
 				</li>
 			</ul>
 		{/if}
