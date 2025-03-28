@@ -36,5 +36,7 @@
 		"typescript": "^5.0.0",
 		"vite": "^6.0.0"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"apexcharts": "^4.5.0"
+	}
 }
