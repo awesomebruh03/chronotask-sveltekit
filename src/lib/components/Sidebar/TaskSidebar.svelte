@@ -30,13 +30,15 @@
 </script>
 
 <div
-	class="sidebar transition-width flex h-[85vh] flex-col items-center bg-red-700 text-white duration-300 {isOpen
-		? 'w-64'
-		: 'w-16'}"
+	class="sidebar flex flex-col items-center bg-gray-700 text-white transition-all duration-300"
+	class:is-collapsed={!isOpen}
 >
 	<!-- Button Container -->
-	<div class="flex w-full justify-center py-4">
-		<button on:click={toggleSidebar} class="rounded-full p-2 transition-colors hover:bg-gray-600">
+	<div class="flex justify-center py-4">
+		<button
+			on:click={toggleSidebar}
+			class="rounded-full p-2 transition-transform hover:bg-gray-600"
+		>
 			<span class="flex items-center">
 				<Icon
 					icon={isOpen ? 'tabler:arrow-bar-left' : 'tabler:arrow-bar-right'}
@@ -47,34 +49,48 @@
 	</div>
 
 	<!-- Add Project Button -->
-	<div class="flex w-full justify-center py-2">
-		{#if isOpen}
+	{#if isOpen}
+		<div class="flex w-full justify-center py-2">
 			<button
 				on:click={addProject}
 				class="rounded-lg bg-gray-500 px-4 py-2 text-sm text-white transition-colors hover:bg-gray-900"
 			>
 				Add Project
 			</button>
-		{:else}
-			<button on:click={addProject} class="rounded-full p-2 transition-colors hover:bg-gray-600">
-				<Icon icon="basil:add-outline" width="24" height="24" />
-			</button>
-		{/if}
-	</div>
+		</div>
+	{/if}
 
 	<!-- Scrollable Project List -->
-	<div class="w-full flex-1 overflow-y-auto px-2">
-		<ul class="flex w-full flex-col space-y-4">
-			{#each projects as project}
-				<li class="group rounded-lg transition-colors hover:bg-gray-600">
-					<a href={project.link} class="flex items-center gap-2 p-2">
-						<Icon icon={project.icon} width="24" height="24" />
-						{#if isOpen}
+	{#if isOpen}
+		<div class="w-full flex-1 overflow-y-auto px-2">
+			<ul class="flex w-full flex-col space-y-4">
+				{#each projects as project}
+					<li class="group rounded-lg transition-colors hover:bg-gray-600">
+						<a href={project.link} class="flex items-center gap-2 p-2">
+							<Icon icon={project.icon} width="24" height="24" />
 							<span class="text-sm transition-all group-hover:text-xl">{project.name}</span>
-						{/if}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</div>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	{/if}
 </div>
+
+<style>
+	.sidebar {
+		width: 16rem; /* Default expanded width */
+		height: 85vh;
+		overflow: hidden;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.sidebar.is-collapsed {
+		width: 3rem; /* Collapsed width matching the button */
+		height: 3rem; /* Collapsed height matching the button */
+		border-radius: 50%; /* Make it circular */
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+</style>
