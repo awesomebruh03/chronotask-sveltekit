@@ -40,6 +40,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"apexcharts": "^4.5.0"
+		"apexcharts": "^4.5.0",
+		"flatpickr": "^4.6.13"
 	}
 }

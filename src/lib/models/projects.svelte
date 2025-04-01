@@ -1,72 +1,47 @@
 <script>
-	export let onSubmit = (project) => {};
-	export let onCancel = () => {};
-	export let isOpen = false;
+	import RangeDatepicker from "./RangeDatepicker.svelte";
 
-	let projectName = '';
-	let projectDescription = '';
-	let projectTimeLimit = '';
+	let startDate = "";
+	let endDate = "";
 
-	function handleSubmit() {
-		onSubmit({
-			name: projectName,
-			description: projectDescription,
-			timeLimit: projectTimeLimit
-		});
-		projectName = '';
-		projectDescription = '';
-		projectTimeLimit = '';
+	function handleSubmit(event) {
+		event.preventDefault();
+		const formData = new FormData(event.target);
+		const data = Object.fromEntries(formData.entries());
+		data.startDate = startDate; // Include start date
+		data.endDate = endDate;     // Include end date
+		console.log("Form submitted", JSON.stringify(data, null, 2));
+	}
+
+	function handleInput(event) {
+		const textarea = event.target;
+		textarea.style.height = "auto"; // Reset height
+		textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height to content
+
+		// Enforce 150-word limit
+		const words = textarea.value.split(/\s+/).filter(Boolean);
+		if (words.length > 150) {
+			textarea.value = words.slice(0, 150).join(" ");
+		}
 	}
 </script>
 
-{#if isOpen}
-	<div class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-		<div class="form-container rounded bg-white p-4 shadow-md">
-			<h2 class="mb-4 text-lg font-bold">Project Details</h2>
-			<form on:submit|preventDefault={handleSubmit}>
-				<div class="mb-4">
-					<label class="mb-1 block text-sm font-medium">Project Name</label>
-					<input
-						type="text"
-						bind:value={projectName}
-						class="w-full rounded border px-3 py-2"
-						placeholder="Enter project name"
-						required
-					/>
-				</div>
-				<div class="mb-4">
-					<label class="mb-1 block text-sm font-medium">Description</label>
-					<textarea
-						bind:value={projectDescription}
-						class="w-full rounded border px-3 py-2"
-						placeholder="Enter project description"
-					></textarea>
-				</div>
-				<div class="mb-4">
-					<label class="mb-1 block text-sm font-medium">Time Limit (in hours)</label>
-					<input
-						type="number"
-						bind:value={projectTimeLimit}
-						class="w-full rounded border px-3 py-2"
-						placeholder="Enter time limit"
-						min="1"
-					/>
-				</div>
-				<div class="flex justify-end space-x-2">
-					<button type="button" on:click={onCancel} class="rounded bg-gray-300 px-4 py-2 text-sm">
-						Cancel
-					</button>
-					<button type="submit" class="rounded bg-blue-500 px-4 py-2 text-sm text-white">
-						Submit
-					</button>
-				</div>
-			</form>
-		</div>
+<form on:submit={handleSubmit} class="flex flex-col gap-6 p-6 bg-gray-100 shadow-sm rounded-lg">
+	<div class="flex items-center justify-center">
+		<input name="projectName" type="text" placeholder="Project Name" class="w-full max-w-md p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400" />
 	</div>
-{/if}
-
-<style>
-	.form-container {
-		max-width: 400px;
-	}
-</style>
+	<div class="flex items-center justify-center">
+		<textarea
+			name="projectDescription"
+			placeholder="Project Description"
+			class="w-full max-w-md p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none overflow-hidden"
+			on:input={handleInput}
+		></textarea>
+	</div>
+	<div class="flex items-center justify-center">
+		<RangeDatepicker bind:startDate={startDate} bind:endDate={endDate} />
+	</div>
+	<div class="flex items-center justify-center">
+		<input type="submit" value="Create Project" class="btn btn-primary w-full max-w-md p-3 border border-gray-300 rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+	</div>
+</form>
