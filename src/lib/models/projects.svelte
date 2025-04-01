@@ -1,8 +1,11 @@
 <script>
 	import RangeDatepicker from "./RangeDatepicker.svelte";
+	import { createEventDispatcher } from 'svelte';
 
 	let startDate = "";
 	let endDate = "";
+
+	const dispatch = createEventDispatcher();
 
 	function handleSubmit(event) {
 		event.preventDefault();
@@ -11,6 +14,9 @@
 		data.startDate = startDate; // Include start date
 		data.endDate = endDate;     // Include end date
 		console.log("Form submitted", JSON.stringify(data, null, 2));
+
+		// Dispatch custom event with project name
+		dispatch('submit', { projectName: data.projectName });
 	}
 
 	function handleInput(event) {

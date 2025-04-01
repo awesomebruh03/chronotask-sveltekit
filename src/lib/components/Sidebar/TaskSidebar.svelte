@@ -1,10 +1,9 @@
 <script>
 	import Icon from '@iconify/svelte';
-	let isOpen = false;
+	import ProjectsModal from '../../models/projects.svelte';
 
-	function toggleSidebar() {
-		isOpen = !isOpen;
-	}
+	let isOpen = false;
+	let showProjectsModal = false;
 
 	let projects = [
 		{
@@ -19,10 +18,22 @@
 		}
 	];
 
-	function addProject() {
+	function toggleSidebar() {
+		isOpen = !isOpen;
+	}
+
+	function openProjectsModal() {
+		showProjectsModal = true;
+	}
+
+	function closeProjectsModal() {
+		showProjectsModal = false;
+	}
+
+	function addProject(projectName) {
 		const newProject = {
-			name: `Project ${String.fromCharCode(65 + projects.length)}`,
-			link: `/projects/${String.fromCharCode(97 + projects.length)}`,
+			name: projectName,
+			link: `/projects/${projectName.toLowerCase().replace(/\s+/g, '-')}`,
 			icon: 'fa-solid:folder'
 		};
 		projects = [...projects, newProject];
@@ -52,7 +63,7 @@
 	{#if isOpen}
 		<div class="flex w-full justify-center py-2">
 			<button
-				on:click={addProject}
+				on:click={openProjectsModal}
 				class="rounded-lg bg-gray-500 px-4 py-2 text-sm text-white transition-colors hover:bg-gray-900"
 			>
 				Add Project
@@ -76,6 +87,28 @@
 		</div>
 	{/if}
 </div>
+
+<!-- Projects Modal -->
+{#if showProjectsModal}
+	<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+		<div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+			<ProjectsModal
+				on:submit={(event) => {
+					addProject(event.detail.projectName);
+					closeProjectsModal();
+				}}
+			/>
+			<div class="flex justify-end mt-4">
+				<button
+					on:click={closeProjectsModal}
+					class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-700"
+				>
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.sidebar {
