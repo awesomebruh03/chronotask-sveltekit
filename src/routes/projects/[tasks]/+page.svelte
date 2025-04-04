@@ -1,1 +1,5 @@
-<h1 class="flex justify-items-center text-9xl text-amber-300">Hello</h1>
+<script>
+	import Tasks from '$lib/components/tasks/tasks.svelte';
+</script>
+
+<Tasks />
