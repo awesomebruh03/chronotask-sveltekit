@@ -41,6 +41,7 @@
 	},
 	"dependencies": {
 		"apexcharts": "^4.5.0",
-		"flatpickr": "^4.6.13"
+		"flatpickr": "^4.6.13",
+		"svelte-dnd-action": "^0.9.60"
 	}
 }
