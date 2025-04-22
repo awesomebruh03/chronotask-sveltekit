@@ -17,7 +17,7 @@
   const statuses = ["PENDING", "IN_PROGRESS", "COMPLETED", "ON_HOLD", "CANCELLED", "OVERDUE"];
 </script>
 
-<div class="flex flex-col space-y-4 w-dvh">
+<div class="flex flex-col space-y-4 w-dvh  bg-gray-50 shadow-md p-4 rounded-md">
   <div class="flex flex-col space-y-2">
     <label for="title" class="text-sm font-medium text-gray-700">Title:</label>
     <input
@@ -66,4 +66,6 @@
   </div>
 
   <RangeDatepicker bind:startDate={task.startAt} bind:endDate={task.endAt} />
+
+  <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">Submit</button>
 </div>
