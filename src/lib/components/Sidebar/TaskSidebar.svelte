@@ -1,6 +1,6 @@
 <script>
 	import Icon from '@iconify/svelte';
-	import ProjectsModal from '../../models/projects.svelte';
+	import ProjectsModal from '../../modals/projects.svelte';
 
 	let isOpen = false;
 	let showProjectsModal = false;

@@ -1,5 +1,5 @@
 <script>
-  import TaskModal from "../../models/tasks.svelte";
+  import TaskModal from "../../modals/tasksModal.svelte";
   import  Icon  from '@iconify/svelte';
 
   export let barColor = 'bg-gray-700'; // Tailwind class for dark gray
