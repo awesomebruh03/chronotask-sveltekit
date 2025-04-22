@@ -44,7 +44,7 @@
     }
 </script>
 
-<div class="flex flex-col space-y-4">
+<div class="flex flex-col space-y-4 bg-gray-100 shadow-md p-4 rounded-md">
   <div class="flex flex-col space-y-2">
     <label for="start-datepicker" class="text-sm font-medium text-gray-700">
       Select Start Date & Time:

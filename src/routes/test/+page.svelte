@@ -1,5 +1,5 @@
 <script>
-    import Projects from '$lib/models/projects.svelte';
+    import Tasks from "$lib/models/tasks.svelte";
 </script>
 
-<Projects/>
+<Tasks/>
