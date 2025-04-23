@@ -20,6 +20,18 @@
   const dispatch = createEventDispatcher();
 
   function handleSubmit() {
+    const titleInput = document.getElementById('title');
+    const errorText = document.getElementById('title-error');
+
+    if (!task.title.trim()) {
+      titleInput.classList.add('border-red-500', 'animate-shake');
+      errorText.classList.remove('hidden');
+      return;
+    }
+
+    titleInput.classList.remove('border-red-500', 'animate-shake');
+    errorText.classList.add('hidden');
+
     const newTask = {
       name: task.title,
       description: task.description,
@@ -53,6 +65,7 @@
     <div class="flex flex-col space-y-4">
       <div class="flex flex-col space-y-2">
         <label for="title" class="text-sm font-medium text-gray-700">Title:</label>
+        <p id="title-error" class="hidden text-red-500 text-sm">Title is required</p>
         <input
           id="title"
           type="text"
