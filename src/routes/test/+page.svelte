@@ -1,5 +1,11 @@
 <script>
-    import Tasks from "$lib/modals/tasksModal.svelte";
+    import tasksModal from "$lib/modals/tasksModal.svelte";
+    import Tasks from "$lib/components/tasks/tasks.svelte";
+    import ProjectDescription from "$lib/components/tasks/projectDescription.svelte";
 </script>
 
-<Tasks/>
+<div class="flex flex-row">
+    <Tasks/>
+    <ProjectDescription/>
+</div>
+
