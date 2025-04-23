@@ -44,12 +44,12 @@
 </script>
 
 <div
-  class="fixed inset-0 bg-transparent bg-opacity-30 flex items-center justify-center z-50"
+  class="fixed inset-0 bg-transparent bg-opacity-30 flex items-center justify-center z-50 px-4 sm:px-6 md:px-8"
   role="dialog"
   tabindex="0"
 >
   <div
-    class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg"
+    class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg sm:max-w-xl md:max-w-2xl"
     role="document"
   >
     <!-- Close button -->
