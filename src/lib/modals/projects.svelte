@@ -21,14 +21,15 @@
 
 	function handleInput(event) {
 		const textarea = event.target;
-		textarea.style.height = "auto"; // Reset height
-		textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height to content
-
-		// Enforce 150-word limit
 		const words = textarea.value.split(/\s+/).filter(Boolean);
-		if (words.length > 150) {
-			textarea.value = words.slice(0, 150).join(" ");
+
+		// Enforce 50-word limit
+		if (words.length > 50) {
+			textarea.value = words.slice(0, 50).join(" ");
 		}
+
+		// Update word count display inside the textarea
+		textarea.setAttribute("data-word-count", `${words.length}/50 words`);
 	}
 </script>
 
@@ -40,7 +41,7 @@
 		<textarea
 			name="projectDescription"
 			placeholder="Project Description"
-			class="w-full max-w-md p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none overflow-hidden"
+			class="w-full max-w-md p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 resize-y overflow-auto"
 			on:input={handleInput}
 		></textarea>
 	</div>
@@ -50,4 +51,5 @@
 	<div class="flex items-center justify-center">
 		<input type="submit" value="Create Project" class="btn btn-primary w-full max-w-md p-3 border border-gray-300 rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400" />
 	</div>
+	<div id="wordCount" class="text-gray-600 text-sm"></div>
 </form>
