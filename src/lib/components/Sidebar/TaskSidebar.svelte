@@ -38,6 +38,10 @@
 		};
 		projects = [...projects, newProject];
 	}
+
+	function deleteProject(index) {
+		projects = projects.filter((_, i) => i !== index);
+	}
 </script>
 
 <div
@@ -75,12 +79,18 @@
 	{#if isOpen}
 		<div class="w-full flex-1 overflow-y-auto px-2">
 			<ul class="flex w-full flex-col space-y-4">
-				{#each projects as project}
-					<li class="group rounded-lg transition-colors hover:bg-gray-600">
+				{#each projects as project, index}
+					<li class="group rounded-lg transition-colors hover:bg-gray-600 flex justify-between items-center">
 						<a href={project.link} class="flex items-center gap-2 p-2">
 							<Icon icon={project.icon} width="24" height="24" />
 							<span class="text-sm transition-all group-hover:text-xl">{project.name}</span>
 						</a>
+						<button
+							on:click={() => deleteProject(index)}
+							class="text-red-500 hover:text-red-700"
+						>
+							<Icon icon="mdi:delete" width="20" height="20" />
+						</button>
 					</li>
 				{/each}
 			</ul>
