@@ -4,17 +4,23 @@
 
 	let isOpen = false;
 	let showProjectsModal = false;
+	let selectedProjectIndex = null;
+	let newMilestone = '';
 
 	let projects = [
 		{
 			name: 'Project Alpha',
 			link: '/projects/alpha',
-			icon: 'fa-solid:folder'
+			icon: 'fa-solid:folder',
+			milestones: [],
+			showMilestones: false
 		},
 		{
 			name: 'Project Beta',
 			link: '/projects/beta',
-			icon: 'fa-solid:folder'
+			icon: 'fa-solid:folder',
+			milestones: [],
+			showMilestones: false
 		}
 	];
 
@@ -34,13 +40,33 @@
 		const newProject = {
 			name: projectName,
 			link: `/projects/${projectName.toLowerCase().replace(/\s+/g, '-')}`,
-			icon: 'fa-solid:folder'
+			icon: 'fa-solid:folder',
+			milestones: [],
+			showMilestones: false
 		};
 		projects = [...projects, newProject];
 	}
 
 	function deleteProject(index) {
 		projects = projects.filter((_, i) => i !== index);
+	}
+
+	function openMilestoneInput(index) {
+		selectedProjectIndex = index;
+		newMilestone = '';
+	}
+
+	function addNewMilestone(event) {
+		if (event.key === 'Enter' && newMilestone.trim() && selectedProjectIndex !== null) {
+			projects[selectedProjectIndex].milestones = projects[selectedProjectIndex].milestones || [];
+			projects[selectedProjectIndex].milestones.push(newMilestone.trim());
+			newMilestone = '';
+			selectedProjectIndex = null;
+		}
+	}
+
+	function toggleMilestoneVisibility(index) {
+		projects[index].showMilestones = !projects[index].showMilestones;
 	}
 </script>
 
@@ -80,17 +106,51 @@
 		<div class="w-full flex-1 overflow-y-auto px-2">
 			<ul class="flex w-full flex-col space-y-4">
 				{#each projects as project, index}
-					<li class="group rounded-lg transition-colors hover:bg-gray-600 flex justify-between items-center">
-						<a href={project.link} class="flex items-center gap-2 p-2">
-							<Icon icon={project.icon} width="24" height="24" />
-							<span class="text-sm transition-all group-hover:text-xl">{project.name}</span>
-						</a>
-						<button
-							on:click={() => deleteProject(index)}
-							class="text-red-500 hover:text-red-700"
-						>
-							<Icon icon="mdi:delete" width="20" height="20" />
-						</button>
+					<li class="group rounded-lg transition-colors hover:bg-gray-600 flex flex-col">
+						<div class="flex justify-between items-center">
+							<a href={project.link} class="flex items-center gap-2 p-2">
+								<Icon icon={project.icon} width="24" height="24" />
+								<span class="text-sm transition-all group-hover:text-xl">{project.name}</span>
+							</a>
+							<button
+								on:click={() => deleteProject(index)}
+								class="text-red-500 hover:text-red-700"
+							>
+								<Icon icon="mdi:delete" width="20" height="20" />
+							</button>
+							<button
+								on:click={() => toggleMilestoneVisibility(index)}
+								class="text-gray-400 hover:text-white"
+							>
+								<Icon icon="tabler:chevron-down" width="20" height="20" />
+							</button>
+						</div>
+						<!-- Milestones Tree -->
+						{#if project.showMilestones}
+							<ul class="ml-6 mt-2 space-y-2 border-l-2 border-gray-500 pl-4">
+								{#each project.milestones as milestone}
+									<li class="text-sm text-gray-300">- {milestone}</li>
+								{/each}
+								<!-- Add Milestone Input -->
+								<div class="mt-2">
+									{#if selectedProjectIndex === index}
+										<input
+											bind:value={newMilestone}
+											placeholder="Add a milestone..."
+											class="w-full rounded-lg p-2 text-sm text-gray-700 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+											on:keydown={addNewMilestone}
+										/>
+									{:else}
+										<button
+											on:click={() => openMilestoneInput(index)}
+											class="rounded-lg bg-transparent px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-600"
+										>
+											Add Milestone
+										</button>
+									{/if}
+								</div>
+							</ul>
+						{/if}
 					</li>
 				{/each}
 			</ul>
