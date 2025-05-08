@@ -5,7 +5,7 @@
 	import Sidebar from '$lib/components/Sidebar/Sidebar.svelte';
 </script>
 
-<div class="flex">
+<div class="flex flex-col md:flex-row h-screen">
 	<!-- Sidebar with fixed width and full height -->
 	<Sidebar />
 
@@ -15,7 +15,7 @@
 		<Header />
 
 		<!-- Scrollable content area -->
-		<main class="flex-1 overflow-auto bg-gray-50 p-4">
+		<main class="flex-1 overflow-auto bg-gray-50 p-4 md:p-6">
 			<slot />
 		</main>
 	</div>
