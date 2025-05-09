@@ -1,22 +1,25 @@
 <script>
   import TaskModal from "../../modals/tasksModal.svelte";
   import Icon from '@iconify/svelte';
+  import { sharedTasks } from '$lib/stores/sharedTasks.js';
 
-  export let tasks = [];
+  export let tasks = $sharedTasks;
 
   let showModal = false;
+
+  $: tasks = $sharedTasks;
 
   function openTaskModal() {
     showModal = true;
   }
 
   function createTask(newTask) {
-    tasks = [...tasks, newTask];
+    sharedTasks.update(ts => [...ts, newTask]);
     showModal = false;
   }
 
   function deleteTask(index) {
-    tasks = tasks.filter((_, i) => i !== index);
+    sharedTasks.update(ts => ts.filter((_, i) => i !== index));
   }
 </script>
 

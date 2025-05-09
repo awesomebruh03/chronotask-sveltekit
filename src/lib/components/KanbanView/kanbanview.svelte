@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
   import TasksModal from '../../modals/tasksModal.svelte';
+  import { sharedTasks } from '$lib/stores/sharedTasks.js';
+  import { get } from 'svelte/store';
 
   // Sample data for the Kanban board
   let columns = writable([
@@ -19,6 +21,25 @@
       id: 'complete',
       title: 'Complete',
       tasks: []
+    }
+  ]);
+
+  $:
+  columns.set([
+    {
+      id: 'todo',
+      title: 'To Do',
+      tasks: get(sharedTasks).filter(t => t.status === 'PENDING' || !t.status)
+    },
+    {
+      id: 'in-progress',
+      title: 'In Progress',
+      tasks: get(sharedTasks).filter(t => t.status === 'IN_PROGRESS')
+    },
+    {
+      id: 'complete',
+      title: 'Complete',
+      tasks: get(sharedTasks).filter(t => t.status === 'COMPLETE' || t.status === 'COMPLETED')
     }
   ]);
 
@@ -52,14 +73,13 @@
 
   // Add new task
   function addTask(columnId, taskTitle) {
-    columns.update(cols => {
-      const column = cols.find(col => col.id === columnId);
-      if (column) {
-        const newTask = { id: `task${Date.now()}`, title: taskTitle };
-        column.tasks.push(newTask);
-      }
-      return cols;
-    });
+    let status = 'PENDING';
+    if (columnId === 'in-progress') status = 'IN_PROGRESS';
+    if (columnId === 'complete') status = 'COMPLETE';
+    sharedTasks.update(ts => [
+      ...ts,
+      { id: `task${Date.now()}`, title: taskTitle, status }
+    ]);
   }
 
   // Add new column
@@ -91,17 +111,7 @@
   }
 
   function updateTaskDescription(updatedTask) {
-    columns.update(cols => {
-      for (const col of cols) {
-        const task = col.tasks.find(t => t.id === updatedTask.id);
-        if (task) {
-          task.title = updatedTask.name;
-          task.description = updatedTask.description;
-          break;
-        }
-      }
-      return cols;
-    });
+    sharedTasks.update(ts => ts.map(t => t.id === updatedTask.id ? { ...t, title: updatedTask.name, description: updatedTask.description } : t));
     closeTaskModal();
   }
 </script>
