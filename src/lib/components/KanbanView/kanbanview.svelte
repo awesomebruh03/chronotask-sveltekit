@@ -170,7 +170,16 @@
           </div>
         {/each}
       </div>
-      <button on:click={() => addTask(column.id, `New Task in ${column.title}`)}>Add Task</button>
+      <div class="flex justify-center w-full">
+        <button
+          class="mt-2 flex items-center gap-2 rounded-full bg-green-600 hover:bg-green-700 text-white shadow-lg px-4 py-2 text-base font-semibold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-green-300"
+          on:click={() => addTask(column.id, `New Task in ${column.title}`)}
+          aria-label={`Add Task to ${column.title}`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+          Add Task
+        </button>
+      </div>
     </div>
   {/each}
   <!-- Add Column Inline Input -->
