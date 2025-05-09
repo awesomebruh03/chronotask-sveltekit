@@ -82,6 +82,7 @@
   }
 
   let newColumnTitle = '';
+  let showAddColumn = false;
 </script>
 
 <style>
@@ -90,6 +91,9 @@
     gap: 1rem;
     padding: 1rem;
     background-color: #f8f9fa;
+    height: 60vh;
+    /* Fixed height for the board */
+    overflow-x: auto;
   }
 
   .kanban-column {
@@ -98,6 +102,10 @@
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    min-width: 250px;
   }
 
   .kanban-column h3 {
@@ -105,6 +113,12 @@
     font-weight: bold;
     margin-bottom: 1rem;
     color: #495057;
+  }
+
+  .kanban-tasks-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
   }
 
   .kanban-task {
@@ -142,24 +156,37 @@
       on:drop={() => handleDrop(column)}
     >
       <h3>{column.title}</h3>
-      {#each column.tasks as task}
-        <div
-          class="kanban-task"
-          role="button"
-          tabindex="0"
-          aria-label="Drag {task.title}"
-          draggable="true"
-          on:dragstart={() => handleDragStart(task, column)}
-        >
-          <div class="kanban-task-title">{task.title}</div>
-        </div>
-      {/each}
+      <div class="kanban-tasks-list">
+        {#each column.tasks as task}
+          <div
+            class="kanban-task"
+            role="button"
+            tabindex="0"
+            aria-label="Drag {task.title}"
+            draggable="true"
+            on:dragstart={() => handleDragStart(task, column)}
+          >
+            <div class="kanban-task-title">{task.title}</div>
+          </div>
+        {/each}
+      </div>
       <button on:click={() => addTask(column.id, `New Task in ${column.title}`)}>Add Task</button>
     </div>
   {/each}
-</div>
-
-<div class="add-controls">
-  <input type="text" placeholder="New Column Title" bind:value={newColumnTitle} />
-  <button on:click={() => addColumn(newColumnTitle)}>Add Column</button>
+  <!-- Add Column Inline Input -->
+  <div class="kanban-column flex flex-col items-center justify-start min-w-[250px] bg-white border-2 border-dashed border-blue-400 p-4 rounded-lg">
+    <input
+      type="text"
+      placeholder="New Column Title"
+      bind:value={newColumnTitle}
+      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2"
+      on:keydown={(e) => { if (e.key === 'Enter' && newColumnTitle.trim()) { addColumn(newColumnTitle.trim()); newColumnTitle = ''; } }}
+    />
+    <button
+      class="w-full rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 transition"
+      on:click={() => { if (newColumnTitle.trim()) { addColumn(newColumnTitle.trim()); newColumnTitle = ''; } }}
+    >
+      Add Column
+    </button>
+  </div>
 </div>
