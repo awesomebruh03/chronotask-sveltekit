@@ -1,30 +1,24 @@
 <script>
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
+  import TasksModal from '../../modals/tasksModal.svelte';
 
   // Sample data for the Kanban board
   let columns = writable([
     {
       id: 'todo',
       title: 'To Do',
-      tasks: [
-        { id: 'task1', title: 'Task 1' },
-        { id: 'task2', title: 'Task 2' }
-      ]
+      tasks: []
     },
     {
       id: 'in-progress',
       title: 'In Progress',
-      tasks: [
-        { id: 'task3', title: 'Task 3' }
-      ]
+      tasks: []
     },
     {
       id: 'complete',
       title: 'Complete',
-      tasks: [
-        { id: 'task4', title: 'Task 4' }
-      ]
+      tasks: []
     }
   ]);
 
@@ -83,6 +77,33 @@
 
   let newColumnTitle = '';
   let showAddColumn = false;
+  let showTaskModal = false;
+  let selectedTask = null;
+
+  function openTaskModal(task) {
+    selectedTask = { ...task };
+    showTaskModal = true;
+  }
+
+  function closeTaskModal() {
+    showTaskModal = false;
+    selectedTask = null;
+  }
+
+  function updateTaskDescription(updatedTask) {
+    columns.update(cols => {
+      for (const col of cols) {
+        const task = col.tasks.find(t => t.id === updatedTask.id);
+        if (task) {
+          task.title = updatedTask.name;
+          task.description = updatedTask.description;
+          break;
+        }
+      }
+      return cols;
+    });
+    closeTaskModal();
+  }
 </script>
 
 <style>
@@ -165,6 +186,7 @@
             aria-label="Drag {task.title}"
             draggable="true"
             on:dragstart={() => handleDragStart(task, column)}
+            on:click={() => openTaskModal(task)}
           >
             <div class="kanban-task-title">{task.title}</div>
           </div>
@@ -199,3 +221,11 @@
     </button>
   </div>
 </div>
+
+{#if showTaskModal}
+  <TasksModal
+    task={selectedTask}
+    on:createTask={(e) => updateTaskDescription({ ...selectedTask, ...e.detail })}
+    on:close={closeTaskModal}
+  />
+{/if}
